@@ -68,6 +68,7 @@ const SignUpPage = () => {
                   <p className="text-sm opacity-70">Join Marvelo today!!</p>
                 </div>
                 <div className="space-y-3">
+                  {/* Full Name */}
                   <div className="form-control w-full">
                     <label className="label">
                       <span className="label-text">Full Name</span>
@@ -87,6 +88,7 @@ const SignUpPage = () => {
                     />
                   </div>
 
+                  {/* Email */}
                   <div className="form-control w-full">
                     <label className="label">
                       <span className="label-text">Email</span>
@@ -103,6 +105,7 @@ const SignUpPage = () => {
                     />
                   </div>
 
+                  {/* Password */}
                   <div className="form-control w-full relative">
                     <label className="label">
                       <span className="label-text">Password</span>
@@ -121,7 +124,7 @@ const SignUpPage = () => {
                       required
                     />
                     <div
-                      className="absolute right-3 top-11 cursor-pointer text-muted-foreground"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
@@ -136,6 +139,7 @@ const SignUpPage = () => {
                     </p>
                   </div>
 
+                  {/* Confirm Password */}
                   <div className="form-control w-full relative">
                     <label className="label">
                       <span className="label-text">Confirm Password</span>
@@ -154,7 +158,7 @@ const SignUpPage = () => {
                       required
                     />
                     <div
-                      className="absolute right-3 top-11 cursor-pointer text-muted-foreground"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground"
                       onClick={() =>
                         setShowConfirmPassword(!showConfirmPassword)
                       }
@@ -170,6 +174,7 @@ const SignUpPage = () => {
                     </p>
                   </div>
 
+                  {/* Terms Checkbox */}
                   <div className="form-control">
                     <label className="label cursor-pointer justify-start gap-2">
                       <input
@@ -191,6 +196,7 @@ const SignUpPage = () => {
                   </div>
                 </div>
 
+                {/* Submit */}
                 <button className="btn btn-primary w-full" type="submit">
                   {isPending ? (
                     <>
@@ -202,6 +208,7 @@ const SignUpPage = () => {
                   )}
                 </button>
 
+                {/* Redirect to Login */}
                 <div className="text-center mt-4">
                   <p className="text-sm">
                     Already have an account?{" "}
