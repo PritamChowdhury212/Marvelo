@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ShellIcon } from "lucide-react";
+import { ShellIcon, EyeIcon, EyeOffIcon } from "lucide-react";
 import { Link } from "react-router";
 import useSignUp from "../hooks/useSignUp.js";
 
@@ -10,6 +10,10 @@ const SignUpPage = () => {
     password: "",
     confirmPassword: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const { isPending, error, signupMutation } = useSignUp();
 
   const handleSignup = (e) => {
@@ -25,7 +29,6 @@ const SignUpPage = () => {
       <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden">
         <div className="hidden lg:flex w-full lg:w-1/2 bg-primary/10 items-center justify-center">
           <div className="max-w-md p-8">
-            {/* Illustration */}
             <div className="relative aspect-square max-w-sm mx-auto">
               <img
                 src="/1.png"
@@ -44,7 +47,6 @@ const SignUpPage = () => {
         </div>
 
         <div className="w-full lg:w-1/2 p-4 sm:p-8 flex flex-col">
-          {/* LOGO */}
           <div className="mb-4 flex items-center justify-start gap-2">
             <ShellIcon className="size-10 text-primary drop-shadow-md" />
             <span className="text-5xl font-extrabold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-widest drop-shadow-lg">
@@ -52,7 +54,6 @@ const SignUpPage = () => {
             </span>
           </div>
 
-          {/* ERROR */}
           {error && (
             <div className="alert alert-error mb-4">
               <span>{error.response.data.message}</span>
@@ -67,7 +68,6 @@ const SignUpPage = () => {
                   <p className="text-sm opacity-70">Join Marvelo today!!</p>
                 </div>
                 <div className="space-y-3">
-                  {/* FULLNAME */}
                   <div className="form-control w-full">
                     <label className="label">
                       <span className="label-text">Full Name</span>
@@ -86,7 +86,7 @@ const SignUpPage = () => {
                       required
                     />
                   </div>
-                  {/* EMAIL */}
+
                   <div className="form-control w-full">
                     <label className="label">
                       <span className="label-text">Email</span>
@@ -102,15 +102,15 @@ const SignUpPage = () => {
                       required
                     />
                   </div>
-                  {/* Password */}
-                  <div className="form-control w-full">
+
+                  <div className="form-control w-full relative">
                     <label className="label">
                       <span className="label-text">Password</span>
                     </label>
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="Enter Password Here"
-                      className="input input-bordered w-full"
+                      className="input input-bordered w-full pr-10"
                       value={signupData.password}
                       onChange={(e) =>
                         setSignupData({
@@ -120,20 +120,30 @@ const SignUpPage = () => {
                       }
                       required
                     />
+                    <div
+                      className="absolute right-3 top-11 cursor-pointer text-muted-foreground"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOffIcon size={18} />
+                      ) : (
+                        <EyeIcon size={18} />
+                      )}
+                    </div>
                     <p className="text-xs opacity-70 mt-1">
                       Password must be at least 8 characters and include an
                       uppercase letter, a number, and a special character
                     </p>
                   </div>
-                  {/* Confirm Password */}
-                  <div className="form-control w-full">
+
+                  <div className="form-control w-full relative">
                     <label className="label">
                       <span className="label-text">Confirm Password</span>
                     </label>
                     <input
-                      type="password"
+                      type={showConfirmPassword ? "text" : "password"}
                       placeholder="Enter Above Password Here"
-                      className="input input-bordered w-full"
+                      className="input input-bordered w-full pr-10"
                       value={signupData.confirmPassword}
                       onChange={(e) =>
                         setSignupData({
@@ -143,11 +153,23 @@ const SignUpPage = () => {
                       }
                       required
                     />
+                    <div
+                      className="absolute right-3 top-11 cursor-pointer text-muted-foreground"
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                    >
+                      {showConfirmPassword ? (
+                        <EyeOffIcon size={18} />
+                      ) : (
+                        <EyeIcon size={18} />
+                      )}
+                    </div>
                     <p className="text-xs opacity-70 mt-1">
                       Passwords must match
                     </p>
                   </div>
-                  {/* Terms Checkbox */}
+
                   <div className="form-control">
                     <label className="label cursor-pointer justify-start gap-2">
                       <input
@@ -169,7 +191,6 @@ const SignUpPage = () => {
                   </div>
                 </div>
 
-                {/* Submit Button */}
                 <button className="btn btn-primary w-full" type="submit">
                   {isPending ? (
                     <>
@@ -181,7 +202,6 @@ const SignUpPage = () => {
                   )}
                 </button>
 
-                {/* Redirect */}
                 <div className="text-center mt-4">
                   <p className="text-sm">
                     Already have an account?{" "}
