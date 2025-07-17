@@ -76,7 +76,7 @@ const SignUpPage = () => {
                     <input
                       type="text"
                       placeholder="Enter Name Here"
-                      className="input input-bordered w-full"
+                      className="input input-bordered w-full h-12"
                       value={signupData.fullName}
                       onChange={(e) =>
                         setSignupData({
@@ -96,7 +96,7 @@ const SignUpPage = () => {
                     <input
                       type="email"
                       placeholder="Enter Email Here"
-                      className="input input-bordered w-full"
+                      className="input input-bordered w-full h-12"
                       value={signupData.email}
                       onChange={(e) =>
                         setSignupData({ ...signupData, email: e.target.value })
@@ -106,32 +106,34 @@ const SignUpPage = () => {
                   </div>
 
                   {/* Password */}
-                  <div className="form-control w-full relative">
+                  <div className="form-control w-full">
                     <label className="label">
                       <span className="label-text">Password</span>
                     </label>
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Enter Password Here"
-                      className="input input-bordered w-full pr-10"
-                      value={signupData.password}
-                      onChange={(e) =>
-                        setSignupData({
-                          ...signupData,
-                          password: e.target.value,
-                        })
-                      }
-                      required
-                    />
-                    <div
-                      className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? (
-                        <EyeOffIcon size={18} />
-                      ) : (
-                        <EyeIcon size={18} />
-                      )}
+                    <div className="relative flex items-center">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter Password Here"
+                        className="input input-bordered w-full pr-10 h-12"
+                        value={signupData.password}
+                        onChange={(e) =>
+                          setSignupData({
+                            ...signupData,
+                            password: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                      <div
+                        className="absolute right-3 cursor-pointer text-muted-foreground"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOffIcon size={18} />
+                        ) : (
+                          <EyeIcon size={18} />
+                        )}
+                      </div>
                     </div>
                     <p className="text-xs opacity-70 mt-1">
                       Password must be at least 8 characters and include an
@@ -140,34 +142,36 @@ const SignUpPage = () => {
                   </div>
 
                   {/* Confirm Password */}
-                  <div className="form-control w-full relative">
+                  <div className="form-control w-full">
                     <label className="label">
                       <span className="label-text">Confirm Password</span>
                     </label>
-                    <input
-                      type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Enter Above Password Here"
-                      className="input input-bordered w-full pr-10"
-                      value={signupData.confirmPassword}
-                      onChange={(e) =>
-                        setSignupData({
-                          ...signupData,
-                          confirmPassword: e.target.value,
-                        })
-                      }
-                      required
-                    />
-                    <div
-                      className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground"
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
-                    >
-                      {showConfirmPassword ? (
-                        <EyeOffIcon size={18} />
-                      ) : (
-                        <EyeIcon size={18} />
-                      )}
+                    <div className="relative flex items-center">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="Enter Above Password Here"
+                        className="input input-bordered w-full pr-10 h-12"
+                        value={signupData.confirmPassword}
+                        onChange={(e) =>
+                          setSignupData({
+                            ...signupData,
+                            confirmPassword: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                      <div
+                        className="absolute right-3 cursor-pointer text-muted-foreground"
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOffIcon size={18} />
+                        ) : (
+                          <EyeIcon size={18} />
+                        )}
+                      </div>
                     </div>
                     <p className="text-xs opacity-70 mt-1">
                       Passwords must match

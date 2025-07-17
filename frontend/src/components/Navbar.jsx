@@ -1,20 +1,13 @@
-import { Link, useLocation } from "react-router";
+import { Link } from "react-router";
 import useAuthUser from "../hooks/useAuthUser.js";
-import { BellIcon, LogOutIcon, ShellIcon, MenuIcon } from "lucide-react";
+import { BellIcon, LogOutIcon, MenuIcon } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
 import useLogout from "../hooks/useLogout.js";
 
 const Navbar = ({ toggleSidebar }) => {
   const { authUser } = useAuthUser();
-  const location = useLocation();
-
-  // LOGO on chat and group pages
-  const isChatPage =
-    location.pathname?.startsWith("/chat") ||
-    location.pathname?.startsWith("/group-chat");
 
   const { logoutMutation } = useLogout();
-
   return (
     <nav className="bg-base-200 border-b border-base-300 sticky top-0 z-30 h-[77px] flex items-center">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -27,18 +20,6 @@ const Navbar = ({ toggleSidebar }) => {
           >
             <MenuIcon className="h-6 w-6 text-base-content opacity-70" />
           </button>
-
-          {/* Logo */}
-          {isChatPage && (
-            <div className="pl-5 hidden lg:flex items-center gap-2.5">
-              <Link to="/" className="flex items-center gap-2.5">
-                <ShellIcon className="size-9 text-primary" />
-                <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-wider">
-                  Marvelo
-                </span>
-              </Link>
-            </div>
-          )}
 
           <div className="flex items-center ml-auto gap-4">
             {/* Group bell and theme selector */}

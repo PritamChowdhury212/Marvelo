@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ShellIcon } from "lucide-react";
+import { ShellIcon, EyeIcon, EyeOffIcon } from "lucide-react";
 import { Link } from "react-router";
 import useLogin from "../hooks/useLogin.js";
 
@@ -8,6 +8,7 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const { isPending, error, loginMutation } = useLogin();
 
   const handleLogin = (e) => {
@@ -87,19 +88,41 @@ const LoginPage = () => {
                     <label className="label">
                       <span className="label-text">Password</span>
                     </label>
-                    <input
-                      type="password"
-                      placeholder="Enter Password Here"
-                      className="input input-bordered w-full"
-                      value={loginData.password}
-                      onChange={(e) =>
-                        setLoginData({
-                          ...loginData,
-                          password: e.target.value,
-                        })
-                      }
-                      required
-                    />
+                    <div className="relative flex items-center">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter Password Here"
+                        className="input input-bordered w-full pr-10"
+                        value={loginData.password}
+                        onChange={(e) =>
+                          setLoginData({
+                            ...loginData,
+                            password: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                      <div
+                        className="absolute right-3 cursor-pointer text-muted-foreground"
+                        onClick={() => setShowPassword(!showPassword)}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            setShowPassword(!showPassword);
+                          }
+                        }}
+                      >
+                        {showPassword ? (
+                          <EyeOffIcon size={18} />
+                        ) : (
+                          <EyeIcon size={18} />
+                        )}
+                      </div>
+                    </div>
                   </div>
 
                   <button
