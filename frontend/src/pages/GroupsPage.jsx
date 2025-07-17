@@ -97,7 +97,7 @@ const GroupsPage = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Your Groups</h1>
+        <h1 className="text-2xl font-bold text-base-content">Your Groups</h1>
         <button
           onClick={() => setShowDialog(!showDialog)}
           className="btn btn-outline btn-sm"
@@ -107,9 +107,11 @@ const GroupsPage = () => {
       </div>
 
       {isLoading ? (
-        <p>Loading groups...</p>
+        <p className="text-base-content">Loading groups...</p>
       ) : groupsData?.length === 0 ? (
-        <p>You are not part of any groups yet.</p>
+        <p className="text-base-content opacity-70">
+          You are not part of any groups yet.
+        </p>
       ) : (
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {groupsData.map((group) => (
@@ -121,7 +123,7 @@ const GroupsPage = () => {
                 onClick={() => setGroupToLeave(group)}
                 disabled={leaveGroupMutation.isLoading}
                 title="Leave Group"
-                className="absolute top-2 right-2 text-red-600 hover:text-red-800 rounded-full p-1 hover:bg-red-100"
+                className="absolute top-2 right-2 text-error hover:text-error-focus rounded-full p-1 hover:bg-error/10"
               >
                 <LogOutIcon className="w-5 h-5" />
               </button>
@@ -137,16 +139,18 @@ const GroupsPage = () => {
                     className="w-10 h-10 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-semibold">
+                  <div className="w-10 h-10 rounded-full bg-base-300 flex items-center justify-center text-base-content font-semibold">
                     {group.name.charAt(0).toUpperCase()}
                   </div>
                 )}
 
                 <div>
-                  <p className="font-semibold text-lg text-gray-900">
+                  <p className="font-semibold text-lg text-base-content">
                     {group.name}
                   </p>
-                  <p className="text-sm text-gray-500">Code: {group.code}</p>
+                  <p className="text-sm opacity-70 text-base-content">
+                    Code: {group.code}
+                  </p>
                 </div>
               </Link>
             </li>
@@ -157,16 +161,18 @@ const GroupsPage = () => {
       {/* Join/Create Dialog */}
       {showDialog && (
         <div className="fixed inset-0 bg-black/30 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md relative">
+          <div className="bg-base-100 p-6 rounded shadow-lg w-full max-w-md relative">
             <button
               onClick={() => setShowDialog(false)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
+              className="absolute top-3 right-3 text-base-content hover:text-primary text-xl font-bold"
               aria-label="Close dialog"
             >
               &times;
             </button>
 
-            <h2 className="text-xl font-semibold mb-4">Join or Create Group</h2>
+            <h2 className="text-xl font-semibold mb-4 text-base-content">
+              Join or Create Group
+            </h2>
 
             <form onSubmit={handleCreateGroup}>
               <input
@@ -174,13 +180,13 @@ const GroupsPage = () => {
                 placeholder="Group name"
                 value={createGroupName}
                 onChange={(e) => setCreateGroupName(e.target.value)}
-                className="input input-bordered w-full mb-2"
+                className="input input-bordered w-full mb-2 bg-base-200 text-base-content"
               />
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setImageFile(e.target.files[0])}
-                className="file-input file-input-bordered w-full mb-2"
+                className="file-input file-input-bordered w-full mb-2 bg-base-200 text-base-content"
               />
               <button className="btn btn-primary w-full" type="submit">
                 {createGroupMutation.isLoading ? "Creating..." : "Create Group"}
@@ -193,7 +199,7 @@ const GroupsPage = () => {
                 placeholder="Group code"
                 value={joinCode}
                 onChange={(e) => setJoinCode(e.target.value)}
-                className="input input-bordered w-full mb-2"
+                className="input input-bordered w-full mb-2 bg-base-200 text-base-content"
               />
               <button className="btn btn-primary w-full" type="submit">
                 {joinGroupMutation.isLoading ? "Joining..." : "Join Group"}
@@ -206,9 +212,11 @@ const GroupsPage = () => {
       {/* Leave Confirmation */}
       {groupToLeave && (
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-          <div className="bg-white rounded shadow-lg p-6 max-w-sm w-full text-center">
-            <h3 className="text-lg font-semibold mb-4">Leave Group</h3>
-            <p className="mb-6">
+          <div className="bg-base-100 rounded shadow-lg p-6 max-w-sm w-full text-center">
+            <h3 className="text-lg font-semibold mb-4 text-base-content">
+              Leave Group
+            </h3>
+            <p className="mb-6 text-base-content">
               Are you sure you want to leave{" "}
               <strong>{groupToLeave.name}</strong>?
             </p>
