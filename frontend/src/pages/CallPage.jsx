@@ -29,6 +29,7 @@ const CallPage = () => {
 
   const { authUser, isLoading } = useAuthUser();
 
+  // Fetch token needed to connect to Stream video API
   const { data: tokenData } = useQuery({
     queryKey: ["streamToken"],
     queryFn: getStreamToken,
@@ -46,6 +47,7 @@ const CallPage = () => {
           image: authUser.profilePic,
         };
 
+        // Initialize Stream video client
         const videoClient = new StreamVideoClient({
           apiKey: STREAM_API_KEY,
           user,
@@ -99,26 +101,40 @@ const CallContent = () => {
   }, [callingState, navigate]);
 
   return (
-    <StreamTheme>
-      {/* Scrollable container with max height leaving space for controls */}
-      <div
-        className="
-          w-full
-          max-h-[calc(100vh-5rem)]
-          overflow-y-auto
-          px-2 pt-2 pb-16 sm:px-4
-        "
-      >
-        <div className="w-full h-full max-h-full rounded-lg overflow-hidden">
-          <SpeakerLayout />
-        </div>
-      </div>
+    <>
+      <style>
+        {`
+          .stream-participant-name,
+          .stream-participant-name * {
+            color: white !important;
+            text-shadow: 0 0 5px rgba(0,0,0,0.7);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+          }
+        `}
+      </style>
 
-      {/* Fixed bottom call controls */}
-      <div className="fixed bottom-0 w-full z-10">
-        <CallControls />
-      </div>
-    </StreamTheme>
+      <StreamTheme>
+        <div
+          className="
+            w-full
+            max-h-[calc(100vh-5rem)]
+            overflow-y-auto
+            px-2 pt-2 pb-16 sm:px-4
+          "
+        >
+          <div className="w-full h-full max-h-full rounded-lg overflow-hidden">
+            <SpeakerLayout />
+          </div>
+        </div>
+
+        <div className="fixed bottom-0 w-full z-10">
+          <CallControls />
+        </div>
+      </StreamTheme>
+    </>
   );
 };
 
