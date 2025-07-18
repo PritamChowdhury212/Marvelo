@@ -9,7 +9,7 @@ import {
   StreamVideoClient,
   StreamCall,
   CallControls,
-  SpeakerLayout,
+  GridLayout,
   StreamTheme,
   CallingState,
   useCallStateHooks,
@@ -98,7 +98,7 @@ const CallContent = () => {
     <StreamTheme>
       <div className="w-full h-[calc(100vh-4rem)] p-2 sm:p-4">
         <div className="w-full h-full rounded-xl shadow-md overflow-hidden">
-          <SpeakerLayout />
+          <GridLayout />
         </div>
       </div>
       <CallControls />
