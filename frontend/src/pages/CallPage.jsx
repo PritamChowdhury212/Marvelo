@@ -9,10 +9,12 @@ import {
   StreamVideoClient,
   StreamCall,
   CallControls,
-  SpeakerLayout,
   StreamTheme,
   CallingState,
   useCallStateHooks,
+  useCall,
+  useParticipants,
+  ParticipantView,
 } from "@stream-io/video-react-sdk";
 
 import "@stream-io/video-react-sdk/dist/css/styles.css";
@@ -96,15 +98,29 @@ const CallContent = () => {
 
   return (
     <StreamTheme>
-      <div className="w-full h-screen overflow-hidden px-2 pt-2 pb-16 sm:px-4">
-        <div className="w-full h-full max-h-full rounded-lg overflow-hidden">
-          <SpeakerLayout />
-        </div>
-      </div>
+      <ResponsiveParticipants />
       <div className="fixed bottom-0 w-full z-10">
         <CallControls />
       </div>
     </StreamTheme>
+  );
+};
+
+const ResponsiveParticipants = () => {
+  const call = useCall();
+  const participants = useParticipants();
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 p-2 h-[calc(100vh-5rem)] overflow-hidden">
+      {participants.map((participant) => (
+        <div
+          key={participant.sessionId}
+          className="w-full h-full aspect-video bg-black rounded-xl overflow-hidden"
+        >
+          <ParticipantView participant={participant} />
+        </div>
+      ))}
+    </div>
   );
 };
 
