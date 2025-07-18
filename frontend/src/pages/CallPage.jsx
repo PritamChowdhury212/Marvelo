@@ -92,15 +92,29 @@ const CallContent = () => {
   const callingState = useCallCallingState();
   const navigate = useNavigate();
 
-  if (callingState === CallingState.LEFT) return navigate("/");
+  useEffect(() => {
+    if (callingState === CallingState.LEFT) {
+      navigate("/");
+    }
+  }, [callingState, navigate]);
 
   return (
     <StreamTheme>
-      <div className="w-full h-screen overflow-hidden px-2 pt-2 pb-16 sm:px-4">
+      {/* Scrollable container with max height leaving space for controls */}
+      <div
+        className="
+          w-full
+          max-h-[calc(100vh-5rem)]
+          overflow-y-auto
+          px-2 pt-2 pb-16 sm:px-4
+        "
+      >
         <div className="w-full h-full max-h-full rounded-lg overflow-hidden">
           <SpeakerLayout />
         </div>
       </div>
+
+      {/* Fixed bottom call controls */}
       <div className="fixed bottom-0 w-full z-10">
         <CallControls />
       </div>
