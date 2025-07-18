@@ -102,7 +102,7 @@ const CallContent = () => {
 
   return (
     <StreamTheme>
-      <ResponsiveParticipants />
+      <ParticipantGrid />
       <div className="fixed bottom-0 w-full z-10">
         <CallControls />
       </div>
@@ -110,8 +110,7 @@ const CallContent = () => {
   );
 };
 
-const ResponsiveParticipants = () => {
-  const call = useCall();
+function ParticipantGrid() {
   const participants = useParticipants();
 
   return (
@@ -126,6 +125,6 @@ const ResponsiveParticipants = () => {
       ))}
     </div>
   );
-};
+}
 
 export default CallPage;
