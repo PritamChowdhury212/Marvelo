@@ -37,11 +37,9 @@ const CallPage = () => {
 
   useEffect(() => {
     const initCall = async () => {
-      if (!tokenData.token || !authUser || !callId) return;
+      if (!tokenData?.token || !authUser || !callId) return;
 
       try {
-        console.log("Initializing Stream video client...");
-
         const user = {
           id: authUser._id,
           name: authUser.fullName,
@@ -55,10 +53,7 @@ const CallPage = () => {
         });
 
         const callInstance = videoClient.call("default", callId);
-
         await callInstance.join({ create: true });
-
-        console.log("Joined call successfully");
 
         setClient(videoClient);
         setCall(callInstance);
@@ -76,20 +71,18 @@ const CallPage = () => {
   if (isLoading || isConnecting) return <PageLoader />;
 
   return (
-    <div className="h-screen flex flex-col items-center justify-center">
-      <div className="relative">
-        {client && call ? (
-          <StreamVideo client={client}>
-            <StreamCall call={call}>
-              <CallContent />
-            </StreamCall>
-          </StreamVideo>
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <p>Could not initialize call. Please refresh or try again later.</p>
-          </div>
-        )}
-      </div>
+    <div className="h-screen w-screen">
+      {client && call ? (
+        <StreamVideo client={client}>
+          <StreamCall call={call}>
+            <CallContent />
+          </StreamCall>
+        </StreamVideo>
+      ) : (
+        <div className="flex items-center justify-center h-full">
+          <p>Could not initialize call. Please refresh or try again later.</p>
+        </div>
+      )}
     </div>
   );
 };
@@ -97,14 +90,17 @@ const CallPage = () => {
 const CallContent = () => {
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
-
   const navigate = useNavigate();
 
   if (callingState === CallingState.LEFT) return navigate("/");
 
   return (
     <StreamTheme>
-      <SpeakerLayout />
+      <div className="w-full h-[calc(100vh-4rem)] p-2 sm:p-4">
+        <div className="w-full h-full rounded-xl shadow-md overflow-hidden">
+          <SpeakerLayout />
+        </div>
+      </div>
       <CallControls />
     </StreamTheme>
   );
