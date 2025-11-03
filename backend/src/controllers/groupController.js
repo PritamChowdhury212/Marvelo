@@ -8,7 +8,7 @@ const STREAM_API_SECRET = process.env.STREAM_API_SECRET;
 // Server-side Stream client
 const serverClient = StreamChat.getInstance(STREAM_API_KEY, STREAM_API_SECRET);
 
-// Create a new group + Stream channel
+// CREATE GROUP + Stream channel
 export const createGroup = async (req, res) => {
   try {
     const { name, image } = req.body;
@@ -26,7 +26,6 @@ export const createGroup = async (req, res) => {
     });
     await group.save();
 
-    // Create Stream channel with proper metadata
     const channel = serverClient.channel("messaging", group._id.toString(), {
       name,
       members: [userId.toString()],
@@ -42,16 +41,14 @@ export const createGroup = async (req, res) => {
   }
 };
 
-// Join a group  + add user to Stream channel
+// JOIN GROUP + add to Stream channel
 export const joinGroup = async (req, res) => {
   try {
     const { code } = req.body;
     const userId = req.user._id;
 
     const group = await Group.findOne({ code });
-    if (!group) {
-      return res.status(404).json({ message: "Group not found" });
-    }
+    if (!group) return res.status(404).json({ message: "Group not found" });
 
     if (group.members.includes(userId)) {
       return res.status(400).json({ message: "Already a member" });
@@ -70,7 +67,7 @@ export const joinGroup = async (req, res) => {
   }
 };
 
-// Get all groups where user is a member
+// GET ALL GROUPS WHERE USER IS A MEMBER
 export const getMyGroups = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -82,18 +79,16 @@ export const getMyGroups = async (req, res) => {
   }
 };
 
-// Get group details by ID
+// GET GROUP DETAILS
 export const getGroupDetails = async (req, res) => {
   try {
     const groupId = req.params.groupId;
-
     const group = await Group.findById(groupId)
-      .populate("members", "username email")
-      .populate("createdBy", "username email");
+      // FIX: populate fullName and profilePic along with username
+      .populate("members", "fullName username profilePic email")
+      .populate("createdBy", "fullName username profilePic email");
 
-    if (!group) {
-      return res.status(404).json({ message: "Group not found" });
-    }
+    if (!group) return res.status(404).json({ message: "Group not found" });
 
     res.json(group);
   } catch (error) {
@@ -102,28 +97,28 @@ export const getGroupDetails = async (req, res) => {
   }
 };
 
-// LEAVE GROUP
+// LEAVE GROUP + remove from Stream channel
 export const leaveGroup = async (req, res) => {
   try {
     const userId = req.user._id;
     const { groupId } = req.params;
 
-    // Find group by id
     const group = await Group.findById(groupId);
-    if (!group) {
-      return res.status(404).json({ message: "Group not found" });
-    }
+    if (!group) return res.status(404).json({ message: "Group not found" });
 
     // Remove user from members array
     group.members = group.members.filter(
       (memberId) => memberId.toString() !== userId.toString()
     );
-
     await group.save();
+
+    // Remove user from Stream channel
+    const channel = serverClient.channel("messaging", groupId.toString());
+    await channel.removeMembers([userId.toString()]);
 
     res.json({ message: "Left group successfully" });
   } catch (error) {
-    console.error("Error leaving group:", error);
+    console.error("LEAVE GROUP ERROR:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

@@ -10,15 +10,17 @@ import chatRoutes from "./routes/chat.route.js";
 import friendRoutes from "./routes/friend.route.js";
 import friendRequestRoutes from "./routes/friendRequest.route.js";
 import groupRoutes from "./routes/groupRoutes.js";
+import streamRoutes from "./routes/streamRoutes.js"; // Stream routes
 
 import { connectDB } from "./lib/db.js";
 import { protectRoute } from "./middleware/auth.middleware.js";
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 const __dirname = path.resolve();
 
+// CORS
 app.use(
   cors({
     origin: "http://localhost:5173", // frontend origin
@@ -29,16 +31,22 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// Public routes (no authentication needed)
+// ------------------- PUBLIC ROUTES -------------------
+// No authentication required
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes);
 
-// Protected routes (require authentication)
+// ------------------- PROTECTED ROUTES -------------------
+// Require authentication
 app.use("/api/friends", protectRoute, friendRoutes);
 app.use("/api/friend-requests", protectRoute, friendRequestRoutes);
 app.use("/api/groups", protectRoute, groupRoutes);
 
+// Stream routes (upsert users & members)
+app.use("/api/stream", protectRoute, streamRoutes);
+
+// ------------------- PRODUCTION -------------------
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
@@ -47,7 +55,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// Connect to DB and start server
+// ------------------- START SERVER -------------------
 connectDB()
   .then(() => {
     app.listen(PORT, () => {

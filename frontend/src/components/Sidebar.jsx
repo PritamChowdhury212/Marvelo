@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react"; // needed for showSidebar
 import { Link, useLocation } from "react-router";
 import useAuthUser from "../hooks/useAuthUser.js";
 import { BellIcon, HomeIcon, ShellIcon, UsersIcon } from "lucide-react";
@@ -12,10 +13,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
       className={`
         bg-base-200 border-r border-base-300 flex flex-col
         lg:sticky lg:top-0 lg:h-screen lg:w-64
-
-        ${
-          showSidebar ? "fixed inset-0 z-50 w-64 h-full" : "hidden lg:flex"
-        } // Hidden on small screens when closed, flex on large
+        ${showSidebar ? "fixed inset-0 z-50 w-64 h-full" : "hidden lg:flex"}
       `}
       style={{ minHeight: "100vh" }}
     >
