@@ -1,4 +1,3 @@
-// GroupChatPage.jsx
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router";
 import {
@@ -31,17 +30,34 @@ const GroupChatPage = () => {
   const [showRecipientModal, setShowRecipientModal] = useState(false);
   const [selectedRecipients, setSelectedRecipients] = useState([]);
 
-  // Track PM listeners to prevent duplicates
   const pmListenersRef = useRef({});
-
+  const activeChannelRef = useRef(null); // REF for latest active channel
   const isPm = activeChannel?.id?.startsWith("pm_");
 
+  // Keep ref updated
+  useEffect(() => {
+    activeChannelRef.current = activeChannel;
+  }, [activeChannel]);
+
+  // ----- Toggle recipient: only allow one recipient & fix double toast -----
   const toggleRecipient = (userId) => {
-    setSelectedRecipients((prev) =>
-      prev.includes(userId)
-        ? prev.filter((id) => id !== userId)
-        : [...prev, userId]
-    );
+    setSelectedRecipients((prev) => {
+      // If already selected -> unselect (no toast)
+      if (prev.includes(userId)) return [];
+
+      // If trying to select a second user -> show toast once
+      if (prev.length >= 1) {
+        if (!toggleRecipient.hasShownToast) {
+          toast.error("You can only message one person at a time.");
+          toggleRecipient.hasShownToast = true; // flag
+        }
+        return prev;
+      }
+
+      // Normal selection
+      toggleRecipient.hasShownToast = false; // reset flag
+      return [userId];
+    });
   };
 
   // ----- Initialize group chat -----
@@ -119,11 +135,10 @@ const GroupChatPage = () => {
     setShowRecipientModal(false);
   };
 
-  // ----- Attach PM notifications (runs whenever new PM channel is added) -----
+  // ----- Attach PM notifications (only if not currently viewing that channel) -----
   useEffect(() => {
     if (!chatClient || !authUser) return;
 
-    // Get all PM channels the user is a member of
     const attachPmListeners = async () => {
       const channels = await chatClient.queryChannels({
         type: "messaging",
@@ -131,11 +146,14 @@ const GroupChatPage = () => {
       });
 
       channels.forEach((chan) => {
-        if (!chan.id.startsWith("pm_")) return; // only PM channels
-        if (pmListenersRef.current[chan.id]) return; // already attached
+        if (!chan.id.startsWith("pm_")) return;
+        if (pmListenersRef.current[chan.id]) return;
 
         const listener = (event) => {
           if (event.message?.user?.id === authUser._id) return;
+
+          // Use ref to check latest active channel
+          if (activeChannelRef.current?.id === chan.id) return;
 
           const sender = event.message?.user?.name || "Someone";
 
@@ -187,7 +205,6 @@ const GroupChatPage = () => {
     );
     const names = others.map((m) => m.user?.name || "Unknown");
     if (names.length === 1) return `Private chat with ${names[0]}`;
-    if (names.length > 1) return `Private chat with ${names.join(", ")}`;
     return "Private Chat";
   };
 
@@ -230,7 +247,7 @@ const GroupChatPage = () => {
                     onClick={() => setShowRecipientModal(true)}
                     className="absolute right-16 top-1/2 -translate-y-1/2 p-0 text-base-content hover:bg-transparent focus:outline-none select-none appearance-none"
                     style={{ transform: "translateY(0) !important" }}
-                    title="Select recipients"
+                    title="Select recipient"
                   >
                     <UserPlus2Icon className="w-5 h-5" />
                   </button>
@@ -253,7 +270,7 @@ const GroupChatPage = () => {
               &times;
             </button>
             <h3 className="text-lg font-semibold mb-4 text-base-content">
-              Select Recipients
+              Select Recipient
             </h3>
             <div className="space-y-2 max-h-60 overflow-y-auto">
               {groupMembers
