@@ -39,7 +39,7 @@ const GroupChatPage = () => {
     activeChannelRef.current = activeChannel;
   }, [activeChannel]);
 
-  // ----- Toggle recipient: only allow one recipient & fix double toast -----
+  //  Toggle recipient: only allow one recipient & fix double toast
   const toggleRecipient = (userId) => {
     setSelectedRecipients((prev) => {
       // If already selected -> unselect (no toast)
@@ -60,7 +60,7 @@ const GroupChatPage = () => {
     });
   };
 
-  // ----- Initialize group chat -----
+  //  Initialize group chat
   useEffect(() => {
     if (!authUser?._id) return;
 
@@ -103,7 +103,7 @@ const GroupChatPage = () => {
     initGroupChat();
   }, [authUser?._id, groupId]);
 
-  // ----- Open or create PM channel -----
+  //  Open or create PM channel
   const openPmChannel = async () => {
     if (!selectedRecipients.length || !chatClient || !authUser) return;
 
@@ -135,7 +135,7 @@ const GroupChatPage = () => {
     setShowRecipientModal(false);
   };
 
-  // ----- Attach PM notifications (only if not currently viewing that channel) -----
+  // Attach PM notifications (only if not currently viewing that channel)
   useEffect(() => {
     if (!chatClient || !authUser) return;
 
@@ -185,7 +185,7 @@ const GroupChatPage = () => {
     attachPmListeners();
   }, [chatClient, authUser]);
 
-  // ----- Send message -----
+  //  Send message
   const sendMessage = async (text) => {
     if (!text?.trim()) return toast.error("Enter a message.");
     if (!chatClient || !authUser || !activeChannel) return;
